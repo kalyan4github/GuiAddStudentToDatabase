@@ -67,6 +67,9 @@ public class DemoGuiAddToDatabase {
                 Student student = new Student(firstName,lastName,collegeName);
                 if(addStudent(student)==1){
                     JOptionPane.showMessageDialog(frame,"Student Sucessfully Added");
+                    txtFirstName.setText("");
+                    txtLastName.setText("");
+                    txtCollegeName.setText("");
                 }
 
             }
