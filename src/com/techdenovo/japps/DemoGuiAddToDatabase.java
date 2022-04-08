@@ -12,25 +12,32 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DemoGuiAddToDatabase {
-    public void addStudent(Student student){
+    JFrame frame =null;
+    public int addStudent(Student student){
+        int flag =0;
         Connection con = new DbConnectionUtils().getDbConnection();
-        String query= "INSERT INTO `testdb`.`STUDENTS` (`FIRST_NAME`, `LAST_NAME`, `COLLEGE_NAME`) VALUES (?, ?, ?)";
+        String query= "INSERT INTO `STUDENTS` (`FIRST_NAME`, `LAST_NAME`, `COLLEGE_NAME`) VALUES (?, ?, ?)";
         try {
             PreparedStatement preparedStatement = con.prepareStatement(query);
             preparedStatement.setString(1,student.getFirstName());
             preparedStatement.setString(2,student.getLastName());
             preparedStatement.setString(3,student.getCollegeName());
-            preparedStatement.executeUpdate();
+            if(preparedStatement.executeUpdate()==1){
+                flag= 1;
+            } else {
+                flag= 0;
+            }
             con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return flag;
     }
     public DemoGuiAddToDatabase() {
         Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
         int screenWidth= (int)size.getWidth();
         int screeHeight= (int)size.getHeight();
-        JFrame frame = new JFrame("Add Student");
+        frame = new JFrame("Add Student");
         frame.setBounds(screenWidth/3,screeHeight/3,500,400);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -58,7 +65,9 @@ public class DemoGuiAddToDatabase {
                 String collegeName = txtCollegeName.getText();
 
                 Student student = new Student(firstName,lastName,collegeName);
-                addStudent(student);
+                if(addStudent(student)==1){
+                    JOptionPane.showMessageDialog(frame,"Student Sucessfully Added");
+                }
 
             }
         });
